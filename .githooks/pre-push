@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+if [ ! -x vendor/bin/phpcs ] || [ ! -x vendor/bin/phpunit ] || [ ! -x vendor/bin/phpstan ] || [ ! -x vendor/bin/parallel-lint ]; then
+    echo "Project tools are not installed. Run: composer install"
+    exit 1
+fi
+
+composer cs
+composer quality
+vendor/bin/phpunit
